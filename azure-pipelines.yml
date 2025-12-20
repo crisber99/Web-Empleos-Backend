@@ -1,19 +1,32 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# 1. TRIGGER: ¿Qué dispara este pipeline?
+# 'main' significa que cualquier cambio (commit) en la rama 'main' iniciará el proceso.
 trigger:
-- master
+- main
 
+# 2. POOL: ¿Dónde se ejecuta esto?
+# Usamos una imagen de Ubuntu (Linux) provista por Microsoft.
 pool:
   vmImage: ubuntu-latest
 
+# 3. STEPS: Los pasos a seguir
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
+# Paso A: Un script simple para saludar (prueba de que la máquina responde)
+- script: echo "Iniciando el Pipeline de Ejemplo..."
+  displayName: 'Saludar al sistema'
+
+# Paso B: Simulación de una construcción (Build)
+# En un caso real, aquí iría 'dotnet build' o 'npm install'
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    mkdir build_output
+    echo "Este es mi código compilado" > build_output/app.exe
+  displayName: 'Simular compilación de código'
+
+# Paso C: Publicar el Artefacto
+# Esto toma los archivos generados y los guarda para que puedas descargarlos después.
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'build_output'
+    ArtifactName: 'MiArtefactoDePrueba'
+    publishLocation: 'Container'
+  displayName: 'Publicar resultados'
